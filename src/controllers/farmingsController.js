@@ -1,12 +1,12 @@
 const farmingsModel = require('../models/farmingsModel');
 
-const getAll = async (_request, response) => {
-  const farmings = await farmingsModel.getAll();
+const get = async (_request, response) => {
+  const farmings = await farmingsModel.get();
 
   return response.status(200).json({ farmings });
 };
 
-const createFarming = async (request, response) => {
+const create = async (request, response) => {
   const createdFarming = await farmingsModel.create(request.body);
   return response.status(200).json(createdFarming);
 };
@@ -28,8 +28,8 @@ const updateFarming = async (request, response) => {
 };
 
 module.exports = {
-  getAll,
-  createFarming,
+  get,
+  create,
   deleteFarming,
   updateFarming,
 };

@@ -1,44 +1,55 @@
-const connection = require('./connection');
+const q = require('../repositories/queries');
+// const connection = require('../config/connection');
 
-const getAll = async () => {
-  const [farmings] = await connection.execute('SELECT id, name FROM farmings');
+// const getAll = async () => {
+//   const [farmings] = await connection.execute('SELECT id, name FROM farmings');
+//   return farmings;
+// };
+
+const get = () => {
+  const farmings = q.read('farmings', 'id, name, cnpj, owner, phone, address');
   return farmings;
 };
 
 const create = async (farming) => {
-  const { name } = farming;
-  const q = 'INSERT INTO farmings (name) VALUES (?)';
-  const [createdFarming] = await connection.execute(q, [name]);
+  // console.log(farming);
+  const { name, cnpj, owner, phone, address, neighborhood } = farming;
+  const values = `'${name}', '${cnpj}', '${owner}', '${phone}', '${address}', '${neighborhood}'`;
+  const ret = q.save(
+    'farmings',
+    'name, cnpj, owner, phone, address, neighborhood',
+    values
+  );
 
-  return { insertId: createdFarming.insertId };
+  return { insertId: ret.insertId };
 };
 
-const deleteFarming = async (id) => {
-  const q = 'DELETE FROM farmings WHERE id = ?';
-  const deletedFarming = await connection.execute(q, [id]);
-  return deletedFarming;
-};
+// const deleteFarming = async (id) => {
+//   const q = 'DELETE FROM farmings WHERE id = ?';
+//   const deletedFarming = await connection.execute(q, [id]);
+//   return deletedFarming;
+// };
 
-const updateFarming = async (id, farming) => {
-  const q = 'UPDATE farmings SET name = ? WHERE id = ?';
-  // 'UPDATE farmings SET name = ?, cnpj = ?, owner = ?, phone = ?, address = ? WHERE id = ?';
-  const { name } = farming;
-  // const { name, cnpj, owner, phone, address } = farming;
+// const updateFarming = async (id, farming) => {
+//   const q = 'UPDATE farmings SET name = ? WHERE id = ?';
+//   // 'UPDATE farmings SET name = ?, cnpj = ?, owner = ?, phone = ?, address = ? WHERE id = ?';
+//   const { name } = farming;
+//   // const { name, cnpj, owner, phone, address } = farming;
 
-  const [updatedFarming] = await connection.execute(q, [
-    name,
-    // cnpj,
-    // owner,
-    // phone,
-    // address,
-    id,
-  ]);
-  return updatedFarming;
-};
+//   const [updatedFarming] = await connection.execute(q, [
+//     name,
+//     // cnpj,
+//     // owner,
+//     // phone,
+//     // address,
+//     id,
+//   ]);
+//   return updatedFarming;
+// };
 
 module.exports = {
-  getAll,
+  get,
   create,
-  deleteFarming,
-  updateFarming,
+  // deleteFarming,
+  // updateFarming,
 };
