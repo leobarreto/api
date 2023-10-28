@@ -3,8 +3,8 @@ const farmingsController = require('../controllers/farmingsController');
 
 const router = express.Router();
 
-router.get('/farmings', farmingsController.getAll);
-router.post('/farmings', farmingsController.createFarming);
+router.get('/farmings', farmingsController.get);
+router.post('/farmings', farmingsController.create);
 router.delete('/farmings/:id', farmingsController.deleteFarming);
 router.put('/farmings/:id', farmingsController.updateFarming);
 
