@@ -1,20 +1,21 @@
-const farmingsModel = require('../models/farmingsModel');
+const Model = require('../models/Farmings');
 
 const get = async (_request, response) => {
-  const farmings = await farmingsModel.get();
+  const farmings = await Model.get();
 
   return response.status(200).json({ farmings });
 };
 
 const create = async (request, response) => {
-  const createdFarming = await farmingsModel.create(request.body);
-  return response.status(200).json(createdFarming);
+  const created = await Model.create(request.body);
+  console.log(created);
+  return response.status(200).json(created);
 };
 
-const deleteFarming = async (request, response) => {
+const destroy = async (request, response) => {
   const { id } = request.params;
 
-  await farmingsModel.deleteFarming(id);
+  await Model.destroy(id);
   return response
     .status(200)
     .json({ message: 'Registro excluído com sucesso' });
@@ -23,13 +24,13 @@ const deleteFarming = async (request, response) => {
 const updateFarming = async (request, response) => {
   const { id } = request.params;
 
-  await farmingsModel.updateFarming(id, request.body);
+  await Model.updateFarming(id, request.body);
   return response.status(200).json({ message: 'Agro atualizada com sucesso!' });
 };
 
 module.exports = {
   get,
   create,
-  deleteFarming,
+  destroy,
   updateFarming,
 };
