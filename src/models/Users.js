@@ -25,6 +25,7 @@ const create = async (req) => {
     username: req.username,
     pwd: req.pwd,
     created_at: created_at,
+    created_by: req.created_by,
     active: 1,
   });
   return user;
