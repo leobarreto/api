@@ -4,16 +4,16 @@ const created_at = dateFormat.format(new Date(), 'YYYY-MM-DD');
 const updated_at = dateFormat.format(new Date(), 'YYYY-MM-DD');
 
 const get = async () => {
-  const users = await database
-    .select('id', 'name', 'email', 'username')
-    .from('users');
+  const users = await database('users')
+    .where({ active: 1 })
+    .select('id', 'name', 'email', 'username');
 
   return users;
 };
 
 const getById = async (id) => {
   const user = await database('users')
-    .where('id', id)
+    .where({ id: id, active: 1 })
     .select('id', 'name', 'email', 'username');
   return user;
 };
@@ -25,6 +25,7 @@ const create = async (req) => {
     username: req.username,
     pwd: req.pwd,
     created_at: created_at,
+    active: 1,
   });
   return user;
 };
@@ -36,12 +37,16 @@ const update = async (id, req) => {
     username: req.username,
     pwd: req.pwd,
     updated_at: updated_at,
+    updated_by: req.updated_by,
   });
   return user;
 };
 
 const destroy = async (id) => {
-  return await database('users').where({ id: id }).del();
+  return await database('users').where({ id: id }).update({
+    active: 0,
+    updated_at: updated_at,
+  });
 };
 
 module.exports = {

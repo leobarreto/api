@@ -75,8 +75,12 @@ const update = async (id, req) => {
   return farming;
 };
 
-const destroy = async (id) => {
-  return await database('farmings').where({ id: id }).del();
+const destroy = async (id, username) => {
+  return await database('farmings').where({ id: id }).update({
+    active: 0,
+    updated_at: updated_at,
+    updated_by: username,
+  });
 };
 
 module.exports = {
