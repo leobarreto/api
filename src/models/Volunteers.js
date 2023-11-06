@@ -4,48 +4,48 @@ const created_at = dateFormat.format(new Date(), 'YYYY-MM-DD');
 const updated_at = dateFormat.format(new Date(), 'YYYY-MM-DD');
 
 const get = async () => {
-  const farmings = await database
+  const volunteers = await database
     .select(
       'id',
       'name',
-      'cnpj',
-      'owner',
+      'cpf',
       'phone',
+      'volunteer_start_date',
       'zipcode',
       'address',
       'district',
       'city',
       'landmark'
     )
-    .from('farmings');
-
-  return farmings;
+    .from('volunteers');
+  return volunteers;
 };
 
 const getById = async (id) => {
-  const farming = await database('farmings')
+  const volunteer = await database('volunteers')
     .where('id', id)
     .select(
       'id',
       'name',
-      'cnpj',
-      'owner',
+      'cpf',
       'phone',
+      'volunteer_start_date',
       'zipcode',
       'address',
       'district',
       'city',
       'landmark'
-    );
-  return farming;
+    )
+    .from('volunteers');
+  return volunteer;
 };
 
 const create = async (req) => {
-  const farming = await database('farmings').insert({
+  const volunteer = await database('volunteers').insert({
     name: req.name,
-    cnpj: req.cnpj,
-    owner: req.owner,
+    cpf: req.cpf,
     phone: req.phone,
+    volunteer_start_date: req.volunteer_start_date,
     zipcode: req.zipcode,
     address: req.address,
     district: req.district,
@@ -55,15 +55,16 @@ const create = async (req) => {
     created_by: req.created_by,
   });
 
-  return farming;
+  return volunteer;
 };
 
 const update = async (id, req) => {
-  const farming = await database('farmings').where({ id: id }).update({
+  const volunteer = await database('volunteers').where('id', id).update({
     name: req.name,
-    cnpj: req.cnpj,
-    owner: req.owner,
+    cpf: req.cpf,
     phone: req.phone,
+    volunteer_start_date: req.volunteer_start_date,
+    zipcode: req.zipcode,
     address: req.address,
     district: req.district,
     city: req.city,
@@ -72,11 +73,11 @@ const update = async (id, req) => {
     updated_by: req.updated_by,
   });
 
-  return farming;
+  return volunteer;
 };
 
 const destroy = async (id) => {
-  return await database('farmings').where({ id: id }).del();
+  await database('volunteers').where('id', id).del();
 };
 
 module.exports = {
