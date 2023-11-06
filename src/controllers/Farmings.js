@@ -1,36 +1,32 @@
 const Model = require('../models/Farmings');
 
-const get = async (_request, response) => {
+const get = async (_req, res) => {
   const farmings = await Model.get();
 
-  return response.status(200).json({ farmings });
+  return res.status(200).json({ farmings });
 };
 
-const create = async (request, response) => {
-  const created = await Model.create(request.body);
-  console.log(created);
-  return response.status(200).json(created);
+const create = async (req, res) => {
+  const farming = await Model.create(req.body);
+
+  return res.status(200).json(farming);
 };
 
-const destroy = async (request, response) => {
-  const { id } = request.params;
+const destroy = async (req, res) => {
+  await Model.destroy(req.params.id);
 
-  await Model.destroy(id);
-  return response
-    .status(200)
-    .json({ message: 'Registro excluído com sucesso' });
+  return res.status(200).json('Agropecuária excluída com sucesso');
 };
 
-const updateFarming = async (request, response) => {
-  const { id } = request.params;
+const update = async (req, res) => {
+  await Model.update(req.params.id, req.body);
 
-  await Model.updateFarming(id, request.body);
-  return response.status(200).json({ message: 'Agro atualizada com sucesso!' });
+  return res.status(200).json('Cadastro atualizado com sucesso');
 };
 
 module.exports = {
   get,
   create,
   destroy,
-  updateFarming,
+  update,
 };

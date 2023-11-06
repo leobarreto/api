@@ -1,7 +1,7 @@
 const database = require('../config/database');
 const dateFormat = require('date-and-time');
-const createdAt = dateFormat.format(new Date(), 'YYYY-MM-DD');
-// const updatedAt = dateFormat.format(new Date(), 'YYYY-MM-DD');
+const created_at = dateFormat.format(new Date(), 'YYYY-MM-DD');
+const updated_at = dateFormat.format(new Date(), 'YYYY-MM-DD');
 
 const get = async () => {
   const farmings = await database
@@ -22,67 +22,55 @@ const get = async () => {
   return farmings;
 };
 
-const create = async (farming) => {
-  // console.log(farming);
-  const {
-    name,
-    cnpj,
-    owner,
-    phone,
-    zipcode,
-    address,
-    district,
-    city,
-    landmark,
-    created_by,
-  } = farming;
-
-  const [ret] = await connection.execute(
-    'INSERT INTO farmings (name, cnpj, owner, phone, zipcode, address, district, city, landmark, created_by, created_at) ' +
-      'VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);',
-    [
-      name,
-      cnpj,
-      owner,
-      phone,
-      zipcode,
-      address,
-      district,
-      city,
-      landmark,
-      created_by,
-      createdAt,
-    ]
-  );
-  return { insertId: ret.insertId };
+const getById = async (id) => {
+  const farming = await database('farmings')
+    .where('id', id)
+    .select('id', 'name', 'email', 'username');
+  return farming;
 };
 
-// const deleteFarming = async (id) => {
-//   const q = 'DELETE FROM farmings WHERE id = ?';
-//   const deletedFarming = await connection.execute(q, [id]);
-//   return deletedFarming;
-// };
+const create = async (req) => {
+  const farming = await database('farmings').insert({
+    name: req.name,
+    cnpj: req.cnpj,
+    owner: req.owner,
+    phone: req.phone,
+    zipcode: req.zipcode,
+    address: req.address,
+    district: req.district,
+    city: req.city,
+    landmark: req.landmark,
+    created_at: created_at,
+    created_by: req.created_by,
+  });
 
-// const updateFarming = async (id, farming) => {
-//   const q = 'UPDATE farmings SET name = ? WHERE id = ?';
-//   // 'UPDATE farmings SET name = ?, cnpj = ?, owner = ?, phone = ?, address = ? WHERE id = ?';
-//   const { name } = farming;
-//   // const { name, cnpj, owner, phone, address } = farming;
+  return farming;
+};
 
-//   const [updatedFarming] = await connection.execute(q, [
-//     name,
-//     // cnpj,
-//     // owner,
-//     // phone,
-//     // address,
-//     id,
-//   ]);
-//   return updatedFarming;
-// };
+const update = async (id, req) => {
+  const farming = await database('farmings').where({ id: id }).update({
+    name: req.name,
+    cnpj: req.cnpj,
+    owner: req.owner,
+    phone: req.phone,
+    address: req.address,
+    district: req.district,
+    city: req.city,
+    landmark: req.landmark,
+    updated_at: updated_at,
+  });
+
+  return farming;
+};
+
+const destroy = async (id) => {
+  return await database('farmings').where({ id: id }).del();
+};
 
 module.exports = {
   get,
+  getById,
   create,
-  // deleteFarming,
-  // updateFarming,
+  update,
+  destroy,
 };

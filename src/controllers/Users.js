@@ -6,6 +6,12 @@ const get = async (_req, res) => {
   return res.status(200).json({ users });
 };
 
+const getById = async (req, res) => {
+  const user = await Model.getById(req.params.id);
+
+  return res.status(200).json(user);
+};
+
 const create = async (req, res) => {
   const user = await Model.create(req.body);
 
@@ -21,11 +27,12 @@ const update = async (req, res) => {
 const destroy = async (req, res) => {
   await Model.destroy(req.params.id);
 
-  return res.status(204).json('Usuário ecluído com sucesso');
+  return res.status(204).json('Usuário excluído com sucesso');
 };
 
 module.exports = {
   get,
+  getById,
   create,
   update,
   destroy,

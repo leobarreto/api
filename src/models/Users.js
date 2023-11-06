@@ -11,6 +11,13 @@ const get = async () => {
   return users;
 };
 
+const getById = async (id) => {
+  const user = await database('users')
+    .where('id', id)
+    .select('id', 'name', 'email', 'username');
+  return user;
+};
+
 const create = async (req) => {
   const user = await database('users').insert({
     name: req.name,
@@ -39,6 +46,7 @@ const destroy = async (id) => {
 
 module.exports = {
   get,
+  getById,
   create,
   update,
   destroy,
